@@ -3,818 +3,1307 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>地址路線規劃系統</title>
-    
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- React and ReactDOM -->
-    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-    
-    <!-- Babel for JSX transformation -->
-    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-    
-    <!-- Lucide React Icons -->
-    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
-    
-    <!-- 錯誤處理和調試 -->
-    <script>
-        // 全域錯誤處理
-        window.addEventListener('error', function(e) {
-            console.error('全域錯誤:', e.error);
-            document.getElementById('root').innerHTML = `
-                <div style="padding: 20px; background: #fee; border: 1px solid #fcc; border-radius: 8px; margin: 20px;">
-                    <h2 style="color: #c33;">載入錯誤</h2>
-                    <p>錯誤訊息: ${e.error.message}</p>
-                    <p>請檢查瀏覽器控制台以獲取更多詳細資訊。</p>
-                </div>
-            `;
-        });
-        
-        // 檢查依賴是否載入
-        window.addEventListener('load', function() {
-            console.log('頁面載入完成');
-            console.log('React:', typeof React);
-            console.log('ReactDOM:', typeof ReactDOM);
-            console.log('Babel:', typeof Babel);
-            console.log('Lucide:', typeof lucide);
-            console.log('PapaParse:', typeof Papa);
-        });
-    </script>
-    
-    <!-- PapaParse for CSV parsing -->
-    <script src="https://unpkg.com/papaparse@5.4.1/papaparse.min.js"></script>
-    
+    <title>鯛魚燒 POS 系統</title>
     <style>
-        /* 自定義樣式 */
-        .animate-spin {
-            animation: spin 1s linear infinite;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
-        
-        @keyframes spin {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Microsoft JhengHei", sans-serif;
+            background: #f5f5f5;
+            min-height: 100vh;
         }
-        
-        /* 確保滾動條樣式 */
-        .overflow-y-auto::-webkit-scrollbar {
-            width: 6px;
+
+        /* 頂部導航欄 */
+        .top-nav {
+            background: white;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            padding: 0 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 80px;
         }
-        
-        .overflow-y-auto::-webkit-scrollbar-track {
-            background: #f1f5f9;
-            border-radius: 3px;
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 15px;
         }
-        
-        .overflow-y-auto::-webkit-scrollbar-thumb {
-            background: #cbd5e1;
-            border-radius: 3px;
+
+        .logo {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #ff9a56 0%, #ff6a3d 100%);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
         }
-        
-        .overflow-y-auto::-webkit-scrollbar-thumb:hover {
-            background: #94a3b8;
+
+        .logo-text h1 {
+            font-size: 22px;
+            color: #333;
+            margin-bottom: 3px;
+        }
+
+        .date-display {
+            font-size: 13px;
+            color: #666;
+        }
+
+        .nav-tabs {
+            display: flex;
+            gap: 10px;
+        }
+
+        .nav-tab {
+            padding: 12px 24px;
+            background: none;
+            border: none;
+            font-size: 16px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #666;
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+
+        .nav-tab.active {
+            background: #ff6a3d;
+            color: white;
+        }
+
+        .current-time {
+            font-size: 20px;
+            font-weight: bold;
+            color: #ff6a3d;
+        }
+
+        /* 主要內容區 */
+        .main-content {
+            display: flex;
+            height: calc(100vh - 80px);
+            overflow: hidden;
+        }
+
+        /* 左側商品區 */
+        .products-area {
+            flex: 1;
+            background: #f8f8f8;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .product-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .product-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .product-card:active {
+            transform: scale(0.98);
+        }
+
+        .product-image {
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(135deg, #e0e0e0 0%, #f5f5f5 100%);
+            border-radius: 50%;
+            margin: 0 auto 15px;
+        }
+
+        .product-name {
+            font-size: 16px;
+            font-weight: 500;
+            color: #333;
+            margin-bottom: 8px;
+        }
+
+        .product-price {
+            font-size: 18px;
+            font-weight: bold;
+            color: #ff6a3d;
+        }
+
+        /* 右側訂單區 */
+        .order-area {
+            width: 400px;
+            background: white;
+            box-shadow: -2px 0 8px rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .order-header {
+            padding: 20px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .order-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .clear-order-btn {
+            padding: 6px 12px;
+            background: #f5f5f5;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            color: #666;
+            font-size: 14px;
+        }
+
+        .order-items {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .empty-cart {
+            text-align: center;
+            padding: 60px 20px;
+            color: #999;
+        }
+
+        .empty-cart-icon {
+            font-size: 60px;
+            margin-bottom: 15px;
+            opacity: 0.3;
+        }
+
+        .empty-cart-text {
+            font-size: 14px;
+        }
+
+        .order-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px;
+            background: #f8f8f8;
+            border-radius: 10px;
+            margin-bottom: 10px;
+        }
+
+        .order-item-info {
+            flex: 1;
+        }
+
+        .order-item-name {
+            font-size: 15px;
+            font-weight: 500;
+            margin-bottom: 5px;
+        }
+
+        .order-item-price {
+            font-size: 14px;
+            color: #666;
+        }
+
+        .order-item-controls {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .qty-btn {
+            width: 32px;
+            height: 32px;
+            border: none;
+            background: #ff6a3d;
+            color: white;
+            border-radius: 6px;
+            font-size: 18px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .qty-btn:active {
+            transform: scale(0.95);
+        }
+
+        .qty-display {
+            min-width: 30px;
+            text-align: center;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .order-item-total {
+            min-width: 60px;
+            text-align: right;
+            font-weight: bold;
+            color: #333;
+        }
+
+        /* 訂單摘要 */
+        .order-summary {
+            border-top: 1px solid #eee;
+            padding: 20px;
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 12px;
+            font-size: 15px;
+        }
+
+        .summary-label {
+            color: #666;
+        }
+
+        .summary-value {
+            font-weight: 500;
+        }
+
+        .total-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 15px;
+            border-top: 2px solid #eee;
+            margin-top: 15px;
+        }
+
+        .total-label {
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .total-amount {
+            font-size: 28px;
+            font-weight: bold;
+            color: #ff6a3d;
+        }
+
+        .checkout-btn {
+            width: 100%;
+            padding: 18px;
+            background: #e0e0e0;
+            color: #999;
+            border: none;
+            border-radius: 10px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: not-allowed;
+            margin-top: 15px;
+        }
+
+        .checkout-btn.active {
+            background: linear-gradient(135deg, #ff9a56 0%, #ff6a3d 100%);
+            color: white;
+            cursor: pointer;
+        }
+
+        .checkout-btn.active:active {
+            transform: scale(0.98);
+        }
+
+        /* 報表頁面 */
+        .report-content {
+            padding: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .report-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .report-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+        }
+
+        .report-card h3 {
+            font-size: 14px;
+            opacity: 0.9;
+            margin-bottom: 10px;
+        }
+
+        .report-card .value {
+            font-size: 36px;
+            font-weight: bold;
+        }
+
+        .report-card:nth-child(2) {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+
+        .report-card:nth-child(3) {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        }
+
+        .report-section {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .report-section h3 {
+            font-size: 18px;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .sales-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .sales-item:last-child {
+            border-bottom: none;
+        }
+
+        .sales-item-name {
+            font-weight: 500;
+            color: #333;
+        }
+
+        .sales-item-qty {
+            color: #666;
+        }
+
+        .time-slot {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 15px;
+            background: #f8f8f8;
+            border-radius: 8px;
+            margin-bottom: 8px;
+        }
+
+        .time-slot-time {
+            font-weight: 500;
+        }
+
+        .time-slot-amount {
+            color: #ff6a3d;
+            font-weight: bold;
+        }
+
+        .clear-data-btn {
+            width: 100%;
+            padding: 15px;
+            background: #dc3545;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            margin-top: 20px;
+            cursor: pointer;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #999;
+        }
+
+        .empty-state-icon {
+            font-size: 60px;
+            margin-bottom: 15px;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px 20px;
+            color: #999;
+        }
+
+        /* 口味選擇彈出視窗 */
+        .flavor-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .flavor-modal.show {
+            display: flex;
+        }
+
+        .flavor-modal-content {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            width: 90%;
+            max-width: 400px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .flavor-modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .flavor-modal-title {
+            font-size: 20px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .flavor-modal-close {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #999;
+        }
+
+        .flavor-selection {
+            margin-bottom: 15px;
+        }
+
+        .flavor-label {
+            font-size: 16px;
+            font-weight: 500;
+            color: #333;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .flavor-options {
+            display: flex;
+            gap: 10px;
+        }
+
+        .flavor-option {
+            flex: 1;
+            padding: 12px 8px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            background: white;
+            cursor: pointer;
+            text-align: center;
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+
+        .flavor-option:hover {
+            border-color: #ff6a3d;
+        }
+
+        .flavor-option.selected {
+            border-color: #ff6a3d;
+            background: #fff5f2;
+            color: #ff6a3d;
+            font-weight: bold;
+        }
+
+        .flavor-confirm-btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #ff9a56 0%, #ff6a3d 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+
+        .flavor-confirm-btn:active {
+            transform: scale(0.98);
+        }
+
+        /* 響應式設計 */
+        @media (max-width: 768px) {
+            .main-content {
+                flex-direction: column;
+            }
+
+            .order-area {
+                width: 100%;
+                height: 50vh;
+            }
+
+            .products-grid {
+                grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            }
+
+            .nav-tabs {
+                display: none;
+            }
+
+            .current-time {
+                font-size: 16px;
+            }
         }
     </style>
 </head>
 <body>
-    <div id="root">
-        <div style="display: flex; align-items: center; justify-content: center; height: 100vh; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
-            <div style="text-align: center; background: white; padding: 40px; border-radius: 16px; box-shadow: 0 20px 40px rgba(0,0,0,0.1);">
-                <div style="width: 60px; height: 60px; border: 4px solid #f3f3f3; border-top: 4px solid #667eea; border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 20px;"></div>
-                <h2 style="color: #333; margin-bottom: 10px;">載入地址路線規劃系統中...</h2>
-                <p style="color: #666; margin: 0;">正在初始化應用程式</p>
+    <!-- 頂部導航欄 -->
+    <div class="top-nav">
+        <div class="logo-section">
+            <div class="logo">🍴</div>
+            <div class="logo-text">
+                <h1>鯛魚燒大師 POS</h1>
+                <div class="date-display" id="dateDisplay"></div>
+            </div>
+        </div>
+        
+        <div class="nav-tabs">
+            <button class="nav-tab active" onclick="switchTab('order')">
+                🛒 點餐收銀
+            </button>
+            <button class="nav-tab" onclick="switchTab('sales')">
+                📋 銷售紀錄
+            </button>
+            <button class="nav-tab" onclick="switchTab('report')">
+                📊 營業報表
+            </button>
+        </div>
+        
+        <div class="current-time" id="currentTime"></div>
+    </div>
+
+    <!-- 主要內容區 -->
+    <div class="main-content">
+        <!-- 點餐頁面 -->
+        <div id="orderPage" style="display: flex; width: 100%;">
+            <!-- 左側商品區 -->
+            <div class="products-area">
+                <div class="section-header">
+                    🍽️ 單品區
+                </div>
+                <div class="products-grid">
+                    <div class="product-card" onclick="addToCart('redbean')">
+                        <div class="product-image" style="background-image: url('https://i.postimg.cc/7LYkj5D2/2044083-0.jpg'); background-size: cover; background-position: center;"></div>
+                        <div class="product-name">紅豆鯛魚燒</div>
+                        <div class="product-price">$50</div>
+                    </div>
+                    <div class="product-card" onclick="addToCart('custard')">
+                        <div class="product-image" style="background-image: url('https://i.postimg.cc/7LYkj5D2/2044083-0.jpg'); background-size: cover; background-position: center;"></div>
+                        <div class="product-name">卡士達鯛魚燒</div>
+                        <div class="product-price">$50</div>
+                    </div>
+                    <div class="product-card" onclick="addToCart('peanut')">
+                        <div class="product-image" style="background-image: url('https://i.postimg.cc/7LYkj5D2/2044083-0.jpg'); background-size: cover; background-position: center;"></div>
+                        <div class="product-name">花生鯛魚燒</div>
+                        <div class="product-price">$50</div>
+                    </div>
+                    <div class="product-card" onclick="addToCart('combo3')">
+                        <div class="product-image" style="background-image: url('https://i.postimg.cc/6Q5XF8w2/2044152-0.jpg'); background-size: cover; background-position: center;"></div>
+                        <div class="product-name">3條魚任意搭配</div>
+                        <div class="product-price">$120</div>
+                    </div>
+                    <div class="product-card" onclick="addToCart('combo2drink')">
+                        <div class="product-image" style="background-image: url('https://i.postimg.cc/wjkzWXKH/2044161.jpg'); background-size: cover; background-position: center;"></div>
+                        <div class="product-name">2條魚配1杯飲料</div>
+                        <div class="product-price">$100</div>
+                    </div>
+                    <div class="product-card" onclick="addToCart('milktea')">
+                        <div class="product-image" style="background-image: url('https://i.postimg.cc/6Q5XF8w3/2044154.jpg'); background-size: cover; background-position: center;"></div>
+                        <div class="product-name">奶茶</div>
+                        <div class="product-price">$45</div>
+                    </div>
+                    <div class="product-card" onclick="addToCart('pearl')">
+                        <div class="product-image" style="background-image: url('https://i.postimg.cc/SQWMGKQ4/Get-Img.jpg'); background-size: cover; background-position: center;"></div>
+                        <div class="product-name">加珍珠</div>
+                        <div class="product-price">$5</div>
+                    </div>
+                    <div class="product-card" onclick="addToCart('freshmilk')">
+                        <div class="product-image" style="background-image: url('https://i.postimg.cc/wxhmkBxq/milk-1024x576.jpg'); background-size: cover; background-position: center;"></div>
+                        <div class="product-name">加鮮奶</div>
+                        <div class="product-price">$10</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 右側訂單區 -->
+            <div class="order-area">
+                <div class="order-header">
+                    <div class="order-title">
+                        📝 當前訂單
+                    </div>
+                    <button class="clear-order-btn" onclick="clearCart()">🗑️</button>
+                </div>
+                
+                <div class="order-items" id="orderItems">
+                    <div class="empty-cart">
+                        <div class="empty-cart-icon">🛒</div>
+                        <div class="empty-cart-text">尚未添加品項</div>
+                    </div>
+                </div>
+                
+                <div class="order-summary">
+                    <div class="summary-row">
+                        <span class="summary-label">數量小計</span>
+                        <span class="summary-value" id="totalQty">0</span>
+                    </div>
+                    <div class="total-row">
+                        <span class="total-label">總計金額</span>
+                        <span class="total-amount" id="totalAmount">$0</span>
+                    </div>
+                    <button class="checkout-btn" id="checkoutBtn" onclick="checkout()">
+                        確認結帳
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 報表頁面 -->
+        <div id="reportPage" style="display: none; width: 100%; overflow-y: auto;">
+            <div class="report-content">
+                <div id="reportContent" class="loading">載入中...</div>
             </div>
         </div>
     </div>
 
-    <script type="text/babel">
-        const { useState, useEffect } = React;
-        
-        // 簡單的圖標組件
-        const MapPin = (props) => React.createElement('svg', {
-          ...props,
-          width: 24,
-          height: 24,
-          viewBox: '0 0 24 24',
-          fill: 'none',
-          stroke: 'currentColor',
-          strokeWidth: 2,
-          strokeLinecap: 'round',
-          strokeLinejoin: 'round'
-        }, React.createElement('path', { d: 'M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z' }), React.createElement('circle', { cx: 12, cy: 10, r: 3 }));
-        
-        const Calendar = (props) => React.createElement('svg', {
-          ...props,
-          width: 24,
-          height: 24,
-          viewBox: '0 0 24 24',
-          fill: 'none',
-          stroke: 'currentColor',
-          strokeWidth: 2,
-          strokeLinecap: 'round',
-          strokeLinejoin: 'round'
-        }, React.createElement('rect', { x: 3, y: 4, width: 18, height: 18, rx: 2, ry: 2 }), React.createElement('line', { x1: 16, y1: 2, x2: 16, y2: 6 }), React.createElement('line', { x1: 8, y1: 2, x2: 8, y2: 6 }), React.createElement('line', { x1: 3, y1: 10, x2: 21, y2: 10 }));
-        
-        const List = (props) => React.createElement('svg', {
-          ...props,
-          width: 24,
-          height: 24,
-          viewBox: '0 0 24 24',
-          fill: 'none',
-          stroke: 'currentColor',
-          strokeWidth: 2,
-          strokeLinecap: 'round',
-          strokeLinejoin: 'round'
-        }, React.createElement('line', { x1: 8, y1: 6, x2: 21, y2: 6 }), React.createElement('line', { x1: 8, y1: 12, x2: 21, y2: 12 }), React.createElement('line', { x1: 8, y1: 18, x2: 21, y2: 18 }), React.createElement('line', { x1: 3, y1: 6, x2: 3.01, y2: 6 }), React.createElement('line', { x1: 3, y1: 12, x2: 3.01, y2: 12 }), React.createElement('line', { x1: 3, y1: 18, x2: 3.01, y2: 18 }));
-        
-        const BarChart3 = (props) => React.createElement('svg', {
-          ...props,
-          width: 24,
-          height: 24,
-          viewBox: '0 0 24 24',
-          fill: 'none',
-          stroke: 'currentColor',
-          strokeWidth: 2,
-          strokeLinecap: 'round',
-          strokeLinejoin: 'round'
-        }, React.createElement('path', { d: 'M3 3v18h18' }), React.createElement('path', { d: 'M18 17V9' }), React.createElement('path', { d: 'M13 17V5' }), React.createElement('path', { d: 'M8 17v-3' }));
-        
-        const Navigation = (props) => React.createElement('svg', {
-          ...props,
-          width: 24,
-          height: 24,
-          viewBox: '0 0 24 24',
-          fill: 'none',
-          stroke: 'currentColor',
-          strokeWidth: 2,
-          strokeLinecap: 'round',
-          strokeLinejoin: 'round'
-        }, React.createElement('polygon', { points: '3,11 22,2 13,21 11,13 3,11' }));
-        
-        const Check = (props) => React.createElement('svg', {
-          ...props,
-          width: 24,
-          height: 24,
-          viewBox: '0 0 24 24',
-          fill: 'none',
-          stroke: 'currentColor',
-          strokeWidth: 2,
-          strokeLinecap: 'round',
-          strokeLinejoin: 'round'
-        }, React.createElement('polyline', { points: '20,6 9,17 4,12' }));
-        
-        const X = (props) => React.createElement('svg', {
-          ...props,
-          width: 24,
-          height: 24,
-          viewBox: '0 0 24 24',
-          fill: 'none',
-          stroke: 'currentColor',
-          strokeWidth: 2,
-          strokeLinecap: 'round',
-          strokeLinejoin: 'round'
-        }, React.createElement('line', { x1: 18, y1: 6, x2: 6, y2: 18 }), React.createElement('line', { x1: 6, y1: 6, x2: 18, y2: 18 }));
-
-        const AddressRoutePlanner = () => {
-          const [allData, setAllData] = useState([]);
-          const [streetData, setStreetData] = useState([]);
-          const [selectedStreets, setSelectedStreets] = useState([]);
-          const [routeDays, setRouteDays] = useState([]);
-          const [view, setView] = useState('overview');
-          const [loading, setLoading] = useState(true);
-          const [loadError, setLoadError] = useState(null);
-
-          // Google Sheets ID from the URL
-          const SPREADSHEET_ID = '1hub7TaS7nnFmbiNFQ-YEBL5AyKU1-x9V';
-
-          useEffect(() => {
-            loadData();
-          }, []);
-
-          // 提取門牌號碼用於排序
-          const extractHouseNumber = (address) => {
-            let cleanAddr = address.replace(/[一二三四五六七八九十百]+樓/, '').replace(/\d+樓/, '');
-            const houseMatch = cleanAddr.match(/(\d+)(?:之(\d+))?號/);
-            if (houseMatch) {
-              const main = parseInt(houseMatch[1]);
-              const sub = houseMatch[2] ? parseInt(houseMatch[2]) : 0;
-              return main * 1000 + sub;
-            }
-            return 999999;
-          };
-
-          const loadData = async () => {
-            setLoading(true);
-            setLoadError(null);
-            
-            try {
-              console.log('開始從 Google Sheets 讀取資料...');
-              
-              // Google Sheets 的各個工作表名稱
-              const sheetNames = ['新店區', '深坑區', '石碇區', '坪林區', '烏來區'];
-              let allSheetData = [];
-
-              // 逐一讀取每個工作表
-              for (const sheetName of sheetNames) {
-                try {
-                  const gid = getSheetGID(sheetName);
-                  const csvUrl = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/export?format=csv&gid=${gid}`;
-                  
-                  console.log(`正在讀取 ${sheetName} (GID: ${gid})...`);
-                  
-                  const response = await fetch(csvUrl);
-                  if (!response.ok) {
-                    throw new Error(`無法讀取 ${sheetName}: ${response.status}`);
-                  }
-                  
-                  const csvText = await response.text();
-                  
-                  // 檢查是否為有效的CSV資料
-                  if (!csvText || csvText.trim().length === 0) {
-                    throw new Error(`${sheetName} 回傳空資料`);
-                  }
-                  
-                  // 使用 PapaParse 解析 CSV
-                  const parsed = Papa.parse(csvText, {
-                    header: true,
-                    skipEmptyLines: true,
-                    dynamicTyping: true
-                  });
-
-                  if (parsed.errors && parsed.errors.length > 0) {
-                    console.warn(`${sheetName} CSV 解析警告:`, parsed.errors);
-                  }
-
-                  const sheetData = parsed.data
-                    .filter(row => row && Object.keys(row).length > 0) // 過濾空行
-                    .map(row => ({
-                      ...row,
-                      '區域': sheetName
-                    }));
-
-                  console.log(`${sheetName}: ${sheetData.length} 筆資料`);
-                  allSheetData = allSheetData.concat(sheetData);
-                  
-                } catch (error) {
-                  console.error(`讀取 ${sheetName} 失敗:`, error);
-                  // 繼續嘗試其他工作表
-                }
-              }
-
-              // 如果無法從 Google Sheets 讀取資料，使用備用資料
-              if (allSheetData.length === 0) {
-                console.log('使用備用資料...');
-                allSheetData = getFallbackData();
-              }
-
-              console.log('總資料筆數:', allSheetData.length);
-              setAllData(allSheetData);
-
-              // 建立街道資料
-              const streetMap = {};
-              allSheetData.forEach(row => {
-                const address = row['地址'] || '';
-                const match = address.match(/([^市區]+[路街巷弄])/);
-                if (match) {
-                  const street = match[1];
-                  if (!streetMap[street]) {
-                    streetMap[street] = {
-                      name: street,
-                      district: row['區域'],
-                      count: 0,
-                      addresses: []
-                    };
-                  }
-                  streetMap[street].count++;
-                  streetMap[street].addresses.push(row);
-                }
-              });
-
-              // 對每條街道的地址按門牌號碼排序
-              Object.values(streetMap).forEach(street => {
-                street.addresses.sort((a, b) => {
-                  return extractHouseNumber(a['地址']) - extractHouseNumber(b['地址']);
-                });
-              });
-
-              const streets = Object.values(streetMap)
-                .sort((a, b) => b.count - a.count)
-                .map((s, idx) => ({ ...s, id: idx }));
-              
-              console.log('街道數量:', streets.length);
-              setStreetData(streets);
-              setLoading(false);
-              console.log('✅ 資料載入完成');
-              
-            } catch (error) {
-              console.error('載入資料錯誤:', error);
-              setLoadError(error.message);
-              setLoading(false);
-            }
-          };
-
-          // 取得工作表的 GID
-          const getSheetGID = (sheetName) => {
-            // 從您的 Google Sheets URL 中取得的實際 GID
-            const gidMap = {
-              '新店區': '1898036359',
-              '深坑區': '1059413360',
-              '石碇區': '468447500', 
-              '坪林區': '1135958968',
-              '烏來區': '396230333'
-            };
-            return gidMap[sheetName] || '1898036359';
-          };
-
-          // 備用資料
-          const getFallbackData = () => {
-            return [
-              { '姓名': '張三', '地址': '新北市新店區中正路123號', '區域': '新店區' },
-              { '姓名': '李四', '地址': '新北市新店區中正路125號', '區域': '新店區' },
-              { '姓名': '王五', '地址': '新北市新店區中正路127號', '區域': '新店區' },
-              { '姓名': '陳六', '地址': '新北市深坑區文山路45號', '區域': '深坑區' },
-              { '姓名': '林七', '地址': '新北市深坑區文山路47號', '區域': '深坑區' },
-              { '姓名': '黃八', '地址': '新北市石碇區碇格路78號', '區域': '石碇區' },
-              { '姓名': '劉九', '地址': '新北市坪林區坪林街12號', '區域': '坪林區' },
-              { '姓名': '吳十', '地址': '新北市烏來區烏來街34號', '區域': '烏來區' }
-            ];
-          };
-
-          const toggleStreet = (streetId) => {
-            setSelectedStreets(prev => {
-              if (prev.includes(streetId)) {
-                return prev.filter(id => id !== streetId);
-              } else {
-                return [...prev, streetId];
-              }
-            });
-          };
-
-          const generateRoute = () => {
-            const days = parseInt(document.getElementById('dayCount').value) || 3;
-            const selected = streetData.filter(s => selectedStreets.includes(s.id));
-            
-            const totalAddresses = selected.reduce((sum, s) => sum + s.count, 0);
-            const perDay = Math.ceil(totalAddresses / days);
-            
-            const routes = [];
-            let currentDay = [];
-            let currentCount = 0;
-
-            selected.forEach(street => {
-              if (currentCount + street.count > perDay && currentDay.length > 0) {
-                routes.push(currentDay);
-                currentDay = [];
-                currentCount = 0;
-              }
-              currentDay.push(street);
-              currentCount += street.count;
-            });
-
-            if (currentDay.length > 0) {
-              routes.push(currentDay);
-            }
-
-            setRouteDays(routes);
-            setView('route');
-          };
-
-          const getTotalSelected = () => {
-            return streetData
-              .filter(s => selectedStreets.includes(s.id))
-              .reduce((sum, s) => sum + s.count, 0);
-          };
-
-          const getDistrictInfo = () => {
-            const districtStats = {};
-            const selected = streetData.filter(s => selectedStreets.includes(s.id));
-            
-            selected.forEach(street => {
-              if (!districtStats[street.district]) {
-                districtStats[street.district] = { count: 0, streets: 0 };
-              }
-              districtStats[street.district].count += street.count;
-              districtStats[street.district].streets += 1;
-            });
-
-            return districtStats;
-          };
-
-          const openInGoogleMaps = (address) => {
-            const encodedAddress = encodeURIComponent(address);
-            window.open(`https://www.google.com/maps/search/?api=1&query=${encodedAddress}`, '_blank');
-          };
-
-          const openDistrictInGoogleMaps = (district) => {
-            const query = `新北市${district}`;
-            const encodedQuery = encodeURIComponent(query);
-            window.open(`https://www.google.com/maps/search/?api=1&query=${encodedQuery}`, '_blank');
-          };
-
-          if (loading) {
-            return (
-              <div className="flex items-center justify-center h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
-                <div className="text-center bg-white rounded-2xl shadow-2xl p-8 max-w-md">
-                  <div className="animate-spin rounded-full h-16 w-16 border-b-4 border-indigo-600 mx-auto"></div>
-                  <p className="mt-4 text-gray-700 text-lg font-medium">載入地址資料中...</p>
-                  <p className="mt-2 text-gray-500 text-sm">正在從 Google Sheets 讀取資料</p>
-                </div>
-              </div>
-            );
-          }
-
-          if (loadError) {
-            return (
-              <div className="flex items-center justify-center h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
-                <div className="text-center bg-white rounded-2xl shadow-2xl p-8 max-w-md">
-                  <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <X className="w-8 h-8 text-red-600" />
-                  </div>
-                  <h2 className="text-xl font-bold text-gray-900 mb-2">載入失敗</h2>
-                  <p className="text-gray-600 mb-4">無法從 Google Sheets 讀取資料</p>
-                  <div className="bg-red-50 border border-red-200 rounded-lg p-3 mb-4">
-                    <p className="text-sm text-red-800 font-mono">{loadError}</p>
-                  </div>
-                  <button
-                    onClick={loadData}
-                    className="px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors font-medium"
-                  >
-                    重新載入
-                  </button>
-                  <div className="mt-4 text-left bg-blue-50 rounded-lg p-4">
-                    <p className="text-sm text-gray-700 font-semibold mb-2">💡 解決方法：</p>
-                    <ul className="text-sm text-gray-600 space-y-1 list-disc list-inside">
-                      <li>確認 Google Sheets 已設為「知道連結的任何人」可檢視</li>
-                      <li>檢查網路連線是否正常</li>
-                      <li>嘗試重新整理頁面（F5）</li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
-            );
-          }
-
-          return (
-            <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
-              {/* Header */}
-              <div className="bg-white shadow-lg">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center space-x-3">
-                      <Navigation className="w-8 h-8 text-indigo-600" />
-                      <h1 className="text-3xl font-bold text-gray-900">地址路線規劃系統</h1>
-                    </div>
-                    <div className="flex space-x-2">
-                      <button
-                        onClick={() => setView('overview')}
-                        className={`px-4 py-2 rounded-lg font-medium transition-colors ${
-                          view === 'overview'
-                            ? 'bg-indigo-600 text-white'
-                            : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-                        }`}
-                      >
-                        <BarChart3 className="w-5 h-5 inline mr-2" />
-                        總覽
-                      </button>
-                      <button
-                        onClick={() => setView('map')}
-                        className={`px-4 py-2 rounded-lg font-medium transition-colors ${
-                          view === 'map'
-                            ? 'bg-indigo-600 text-white'
-                            : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-                        }`}
-                        disabled={selectedStreets.length === 0}
-                      >
-                        <MapPin className="w-5 h-5 inline mr-2" />
-                        地圖檢視
-                      </button>
-                      <button
-                        onClick={() => setView('route')}
-                        className={`px-4 py-2 rounded-lg font-medium transition-colors ${
-                          view === 'route'
-                            ? 'bg-indigo-600 text-white'
-                            : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-                        }`}
-                        disabled={routeDays.length === 0}
-                      >
-                        <Calendar className="w-5 h-5 inline mr-2" />
-                        路線規劃
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Stats Bar */}
-              <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-                <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-                  <div className="bg-white rounded-xl shadow-md p-6">
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <p className="text-sm text-gray-600">總地址數</p>
-                        <p className="text-2xl font-bold text-gray-900">{allData.length}</p>
-                      </div>
-                      <MapPin className="w-10 h-10 text-blue-500" />
-                    </div>
-                  </div>
-                  <div className="bg-white rounded-xl shadow-md p-6">
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <p className="text-sm text-gray-600">街道總數</p>
-                        <p className="text-2xl font-bold text-gray-900">{streetData.length}</p>
-                      </div>
-                      <List className="w-10 h-10 text-green-500" />
-                    </div>
-                  </div>
-                  <div className="bg-white rounded-xl shadow-md p-6">
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <p className="text-sm text-gray-600">已選擇街道</p>
-                        <p className="text-2xl font-bold text-indigo-600">{selectedStreets.length}</p>
-                      </div>
-                      <Check className="w-10 h-10 text-indigo-500" />
-                    </div>
-                  </div>
-                  <div className="bg-white rounded-xl shadow-md p-6">
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <p className="text-sm text-gray-600">已選地址數</p>
-                        <p className="text-2xl font-bold text-indigo-600">{getTotalSelected()}</p>
-                      </div>
-                      <Navigation className="w-10 h-10 text-purple-500" />
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Main Content */}
-              <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-12">
-                {view === 'overview' && (
-                  <div className="space-y-6">
-                    <div className="bg-white rounded-xl shadow-lg p-6">
-                      <h2 className="text-xl font-bold text-gray-900 mb-4">選擇高密度區域</h2>
-                      <div className="flex items-center space-x-4 mb-4">
-                        <label className="text-gray-700 font-medium">規劃天數：</label>
-                        <input
-                          id="dayCount"
-                          type="number"
-                          min="1"
-                          max="10"
-                          defaultValue="3"
-                          className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
-                        />
-                        <button
-                          onClick={generateRoute}
-                          disabled={selectedStreets.length === 0}
-                          className={`px-6 py-2 rounded-lg font-medium transition-all ${
-                            selectedStreets.length === 0
-                              ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                              : 'bg-indigo-600 text-white hover:bg-indigo-700 shadow-md hover:shadow-lg'
-                          }`}
-                        >
-                          生成路線規劃
-                        </button>
-                        {selectedStreets.length > 0 && (
-                          <button
-                            onClick={() => setSelectedStreets([])}
-                            className="px-4 py-2 bg-red-100 text-red-600 rounded-lg hover:bg-red-200 transition-colors"
-                          >
-                            清除選擇
-                          </button>
-                        )}
-                      </div>
-                      <p className="text-sm text-gray-500">
-                        點擊下方街道卡片來選擇要拜訪的區域。選擇完成後可以在地圖檢視中查看分布情況。
-                      </p>
-                    </div>
-
-                    <div className="bg-white rounded-xl shadow-lg p-6">
-                      <h2 className="text-xl font-bold text-gray-900 mb-4">
-                        街道密集度排名（前50名）
-                      </h2>
-                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                        {streetData.slice(0, 50).map((street, index) => (
-                          <div
-                            key={street.id}
-                            onClick={() => toggleStreet(street.id)}
-                            className={`cursor-pointer rounded-lg border-2 p-4 transition-all hover:shadow-lg ${
-                              selectedStreets.includes(street.id)
-                                ? 'border-indigo-500 bg-indigo-50 shadow-md'
-                                : 'border-gray-200 bg-white hover:border-indigo-300'
-                            }`}
-                          >
-                            <div className="flex items-start justify-between">
-                              <div className="flex-1">
-                                <div className="flex items-center space-x-2 mb-2">
-                                  <span className="text-lg font-bold text-gray-400">#{index + 1}</span>
-                                  {selectedStreets.includes(street.id) && (
-                                    <Check className="w-5 h-5 text-indigo-600" />
-                                  )}
-                                </div>
-                                <h3 className="font-bold text-gray-900 mb-1">{street.name}</h3>
-                                <p className="text-sm text-gray-600 mb-2">{street.district}</p>
-                                <div className="flex items-center space-x-2">
-                                  <MapPin className="w-4 h-4 text-indigo-500" />
-                                  <span className="text-lg font-bold text-indigo-600">
-                                    {street.count} 個地址
-                                  </span>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-                )}
-
-                {view === 'map' && selectedStreets.length > 0 && (
-                  <div className="space-y-6">
-                    <div className="bg-white rounded-xl shadow-lg p-6">
-                      <h2 className="text-2xl font-bold text-gray-900 mb-4">地圖檢視 - 區域分布</h2>
-                      
-                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
-                        {Object.entries(getDistrictInfo()).map(([district, info]) => (
-                          <div key={district} className="bg-gradient-to-br from-indigo-50 to-purple-50 rounded-lg p-4 border-2 border-indigo-200">
-                            <div className="flex items-center justify-between mb-3">
-                              <h3 className="font-bold text-gray-900 text-lg">{district}</h3>
-                              <button
-                                onClick={() => openDistrictInGoogleMaps(district)}
-                                className="px-3 py-1 bg-indigo-600 text-white text-sm rounded-lg hover:bg-indigo-700 transition-colors flex items-center space-x-1"
-                              >
-                                <MapPin className="w-4 h-4" />
-                                <span>開啟地圖</span>
-                              </button>
-                            </div>
-                            <div className="space-y-1">
-                              <p className="text-sm text-gray-600">街道數：<span className="font-semibold text-indigo-600">{info.streets}</span></p>
-                              <p className="text-sm text-gray-600">地址數：<span className="font-semibold text-indigo-600">{info.count}</span></p>
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-
-                      <h3 className="text-xl font-bold text-gray-900 mb-4">已選擇的街道</h3>
-                      <div className="space-y-3">
-                        {streetData.filter(s => selectedStreets.includes(s.id)).map((street) => (
-                          <div key={street.id} className="bg-gray-50 rounded-lg p-4 border border-gray-200">
-                            <div className="flex items-center justify-between mb-3">
-                              <div>
-                                <h4 className="font-bold text-gray-900">{street.name}</h4>
-                                <p className="text-sm text-gray-600">{street.district} • {street.count} 個地址</p>
-                              </div>
-                              <button
-                                onClick={() => openInGoogleMaps(`${street.district}${street.name}`)}
-                                className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors flex items-center space-x-2"
-                              >
-                                <MapPin className="w-4 h-4" />
-                                <span>在 Google 地圖中查看</span>
-                              </button>
-                            </div>
-                            
-                            <details className="mt-2">
-                              <summary className="cursor-pointer font-medium text-indigo-600 hover:text-indigo-700 text-sm">
-                                查看所有地址 ({street.addresses.length})
-                              </summary>
-                              <div className="mt-3 space-y-2 max-h-60 overflow-y-auto">
-                                {street.addresses.map((addr, addrIndex) => (
-                                  <div key={addrIndex} className="flex items-center justify-between text-sm border-b border-gray-200 pb-2">
-                                    <div>
-                                      <p className="font-medium text-gray-800">{addr['姓名']}</p>
-                                      <p className="text-gray-600">{addr['地址']}</p>
-                                    </div>
-                                    <button
-                                      onClick={() => openInGoogleMaps(addr['地址'])}
-                                      className="px-2 py-1 bg-blue-100 text-blue-700 text-xs rounded hover:bg-blue-200 transition-colors flex items-center space-x-1"
-                                    >
-                                      <MapPin className="w-3 h-3" />
-                                      <span>導航</span>
-                                    </button>
-                                  </div>
-                                ))}
-                              </div>
-                            </details>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-                )}
-
-                {view === 'route' && routeDays.length > 0 && (
-                  <div className="space-y-6">
-                    <div className="bg-white rounded-xl shadow-lg p-6">
-                      <h2 className="text-2xl font-bold text-gray-900 mb-2">
-                        {routeDays.length} 天路線規劃
-                      </h2>
-                      <p className="text-gray-600 mb-4">
-                        總計 {getTotalSelected()} 個地址，分配到 {routeDays.length} 天完成
-                      </p>
-                    </div>
-
-                    {routeDays.map((day, dayIndex) => {
-                      const dayTotal = day.reduce((sum, s) => sum + s.count, 0);
-                      const dayDistricts = [...new Set(day.map(s => s.district))];
-                      
-                      return (
-                        <div key={dayIndex} className="bg-white rounded-xl shadow-lg overflow-hidden">
-                          <div className="bg-gradient-to-r from-indigo-600 to-purple-600 px-6 py-4">
-                            <div className="flex items-center justify-between">
-                              <h3 className="text-xl font-bold text-white flex items-center">
-                                <Calendar className="w-6 h-6 mr-2" />
-                                第 {dayIndex + 1} 天
-                              </h3>
-                              <div className="text-right">
-                                <p className="text-indigo-100 text-sm">涵蓋區域：{dayDistricts.join('、')}</p>
-                                <p className="text-white font-bold">{dayTotal} 個地址</p>
-                              </div>
-                            </div>
-                          </div>
-                          <div className="p-6 space-y-4">
-                            {day.map((street, streetIndex) => (
-                              <div key={streetIndex} className="border-l-4 border-indigo-500 pl-4 py-2 bg-gray-50 rounded-r-lg">
-                                <div className="flex items-center justify-between mb-2">
-                                  <div className="flex items-center space-x-3">
-                                    <span className="text-2xl font-bold text-indigo-600">#{streetIndex + 1}</span>
-                                    <div>
-                                      <h4 className="font-bold text-gray-900">{street.name}</h4>
-                                      <p className="text-sm text-gray-600">{street.district}</p>
-                                    </div>
-                                  </div>
-                                  <div className="flex items-center space-x-2">
-                                    <span className="text-sm bg-indigo-100 text-indigo-700 px-3 py-1 rounded-full font-medium">
-                                      {street.count} 個地址
-                                    </span>
-                                    <button
-                                      onClick={() => openInGoogleMaps(`${street.district}${street.name}`)}
-                                      className="px-3 py-1 bg-green-600 text-white text-sm rounded-lg hover:bg-green-700 transition-colors flex items-center space-x-1"
-                                    >
-                                      <MapPin className="w-4 h-4" />
-                                      <span>導航</span>
-                                    </button>
-                                  </div>
-                                </div>
-                                <details className="mt-3">
-                                  <summary className="cursor-pointer font-medium text-indigo-600 hover:text-indigo-700">
-                                    查看詳細地址清單（已按門牌號碼排序）
-                                  </summary>
-                                  <div className="mt-3 space-y-2 max-h-60 overflow-y-auto bg-white rounded-lg p-3">
-                                    {street.addresses.map((addr, addrIndex) => (
-                                      <div key={addrIndex} className="flex items-center justify-between text-sm border-b border-gray-200 pb-2">
-                                        <div>
-                                          <p className="font-medium text-gray-800">{addr['姓名']}</p>
-                                          <p className="text-gray-600">{addr['地址']}</p>
-                                        </div>
-                                        <button
-                                          onClick={() => openInGoogleMaps(addr['地址'])}
-                                          className="px-2 py-1 bg-blue-100 text-blue-700 text-xs rounded hover:bg-blue-200 transition-colors flex items-center space-x-1 whitespace-nowrap"
-                                        >
-                                          <MapPin className="w-3 h-3" />
-                                          <span>導航</span>
-                                        </button>
-                                      </div>
-                                    ))}
-                                  </div>
-                                </details>
-                              </div>
-                            ))}
-                          </div>
-                        </div>
-                      );
-                    })}
-                  </div>
-                )}
-              </div>
+    <!-- 口味選擇彈出視窗 -->
+    <div class="flavor-modal" id="flavorModal">
+        <div class="flavor-modal-content">
+            <div class="flavor-modal-header">
+                <div class="flavor-modal-title">🐟 選擇 3 條魚的口味</div>
+                <button class="flavor-modal-close" onclick="closeFlavorModal()">✕</button>
             </div>
-          );
+
+            <div class="flavor-selection">
+                <span class="flavor-label">第 1 條魚</span>
+                <div class="flavor-options">
+                    <button class="flavor-option selected" onclick="selectFlavor(1, 'peanut', this)">花生</button>
+                    <button class="flavor-option" onclick="selectFlavor(1, 'custard', this)">卡士達</button>
+                    <button class="flavor-option" onclick="selectFlavor(1, 'redbean', this)">紅豆</button>
+                </div>
+            </div>
+
+            <div class="flavor-selection">
+                <span class="flavor-label">第 2 條魚</span>
+                <div class="flavor-options">
+                    <button class="flavor-option selected" onclick="selectFlavor(2, 'peanut', this)">花生</button>
+                    <button class="flavor-option" onclick="selectFlavor(2, 'custard', this)">卡士達</button>
+                    <button class="flavor-option" onclick="selectFlavor(2, 'redbean', this)">紅豆</button>
+                </div>
+            </div>
+
+            <div class="flavor-selection">
+                <span class="flavor-label">第 3 條魚</span>
+                <div class="flavor-options">
+                    <button class="flavor-option selected" onclick="selectFlavor(3, 'peanut', this)">花生</button>
+                    <button class="flavor-option" onclick="selectFlavor(3, 'custard', this)">卡士達</button>
+                    <button class="flavor-option" onclick="selectFlavor(3, 'redbean', this)">紅豆</button>
+                </div>
+            </div>
+
+            <button class="flavor-confirm-btn" onclick="confirmFlavorSelection()">確認加入購物車</button>
+        </div>
+    </div>
+
+    <!-- 2條魚套餐口味選擇彈出視窗 -->
+    <div class="flavor-modal" id="flavorModal2">
+        <div class="flavor-modal-content">
+            <div class="flavor-modal-header">
+                <div class="flavor-modal-title">🐟 選擇 2 條魚的口味</div>
+                <button class="flavor-modal-close" onclick="closeFlavorModal2()">✕</button>
+            </div>
+
+            <div class="flavor-selection">
+                <span class="flavor-label">第 1 條魚</span>
+                <div class="flavor-options">
+                    <button class="flavor-option selected" onclick="selectFlavor2(1, 'peanut', this)">花生</button>
+                    <button class="flavor-option" onclick="selectFlavor2(1, 'custard', this)">卡士達</button>
+                    <button class="flavor-option" onclick="selectFlavor2(1, 'redbean', this)">紅豆</button>
+                </div>
+            </div>
+
+            <div class="flavor-selection">
+                <span class="flavor-label">第 2 條魚</span>
+                <div class="flavor-options">
+                    <button class="flavor-option selected" onclick="selectFlavor2(2, 'peanut', this)">花生</button>
+                    <button class="flavor-option" onclick="selectFlavor2(2, 'custard', this)">卡士達</button>
+                    <button class="flavor-option" onclick="selectFlavor2(2, 'redbean', this)">紅豆</button>
+                </div>
+            </div>
+
+            <button class="flavor-confirm-btn" onclick="confirmFlavorSelection2()">確認加入購物車</button>
+        </div>
+    </div>
+
+    <script>
+        // 菜單定義
+        const menu = {
+            redbean: { name: '紅豆鯛魚燒', price: 50 },
+            custard: { name: '卡士達鯛魚燒', price: 50 },
+            peanut: { name: '花生鯛魚燒', price: 50 },
+            combo3: { name: '3條魚任意搭配', price: 120 },
+            combo2drink: { name: '2條魚配1杯飲料', price: 100 },
+            milktea: { name: '奶茶', price: 45 },
+            pearl: { name: '加珍珠', price: 5 },
+            freshmilk: { name: '加鮮奶', price: 10 }
         };
 
-        // 等待所有依賴載入完成後再渲染
-        function waitForDependencies() {
-            if (typeof React === 'undefined' || typeof ReactDOM === 'undefined' || typeof Babel === 'undefined') {
-                console.log('等待依賴載入...');
-                setTimeout(waitForDependencies, 100);
+        // 當前訂單
+        let currentOrder = {};
+
+        // 口味選擇狀態 (3條魚套餐)
+        let selectedFlavors = {
+            1: 'peanut',
+            2: 'peanut',
+            3: 'peanut'
+        };
+
+        // 口味選擇狀態 (2條魚套餐)
+        let selectedFlavors2 = {
+            1: 'peanut',
+            2: 'peanut'
+        };
+
+        // 口味名稱對照
+        const flavorNames = {
+            peanut: '花生',
+            custard: '卡士達',
+            redbean: '紅豆'
+        };
+
+        // 初始化
+        async function init() {
+            updateDateDisplay();
+            updateTimeDisplay();
+            setInterval(updateTimeDisplay, 1000);
+            updateOrderDisplay();
+            
+            await initStorage();
+        }
+
+        // 更新日期顯示
+        function updateDateDisplay() {
+            const now = new Date();
+            const year = now.getFullYear();
+            const month = now.getMonth() + 1;
+            const date = now.getDate();
+            const days = ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'];
+            const day = days[now.getDay()];
+            
+            document.getElementById('dateDisplay').textContent = 
+                `${year}年${month}月${date}日 ${day}`;
+        }
+
+        // 更新時間顯示
+        function updateTimeDisplay() {
+            const now = new Date();
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const seconds = String(now.getSeconds()).padStart(2, '0');
+            
+            document.getElementById('currentTime').textContent = 
+                `${hours}:${minutes}:${seconds}`;
+        }
+
+        // 初始化儲存
+        async function initStorage() {
+            try {
+                const todayKey = getTodayKey();
+                const todayData = await window.storage.get(todayKey, true);
+                
+                if (!todayData) {
+                    await window.storage.set(todayKey, JSON.stringify({
+                        date: todayKey,
+                        orders: [],
+                        totalRevenue: 0,
+                        itemSales: {},
+                        timeSales: {}
+                    }), true);
+                }
+            } catch (error) {
+                console.log('初始化儲存失敗:', error);
+            }
+        }
+
+        // 取得今日鍵值
+        function getTodayKey() {
+            const now = new Date();
+            return `sales-${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+        }
+
+        // 添加商品到購物車
+        function addToCart(itemId) {
+            // 如果是3條魚套餐，跳出口味選擇視窗
+            if (itemId === 'combo3') {
+                openFlavorModal();
                 return;
             }
+
+            // 如果是2條魚配飲料套餐，跳出口味選擇視窗
+            if (itemId === 'combo2drink') {
+                openFlavorModal2();
+                return;
+            }
+
+            if (!currentOrder[itemId]) {
+                currentOrder[itemId] = 0;
+            }
+            currentOrder[itemId]++;
+            updateOrderDisplay();
+        }
+
+        // 開啟口味選擇視窗
+        function openFlavorModal() {
+            // 重置選擇狀態
+            selectedFlavors = { 1: 'peanut', 2: 'peanut', 3: 'peanut' };
+
+            // 重置按鈕選擇狀態
+            document.querySelectorAll('.flavor-selection').forEach((section, index) => {
+                const buttons = section.querySelectorAll('.flavor-option');
+                buttons.forEach(btn => btn.classList.remove('selected'));
+                buttons[0].classList.add('selected'); // 預設選擇花生
+            });
+
+            document.getElementById('flavorModal').classList.add('show');
+        }
+
+        // 關閉口味選擇視窗
+        function closeFlavorModal() {
+            document.getElementById('flavorModal').classList.remove('show');
+        }
+
+        // 選擇口味
+        function selectFlavor(fishNumber, flavor, button) {
+            selectedFlavors[fishNumber] = flavor;
+
+            // 更新按鈕狀態
+            const parent = button.parentElement;
+            parent.querySelectorAll('.flavor-option').forEach(btn => {
+                btn.classList.remove('selected');
+            });
+            button.classList.add('selected');
+        }
+
+        // 確認口味選擇並加入購物車
+        function confirmFlavorSelection() {
+            // 產生口味組合的顯示名稱
+            const flavorCombo = `${flavorNames[selectedFlavors[1]]}/${flavorNames[selectedFlavors[2]]}/${flavorNames[selectedFlavors[3]]}`;
+            const comboKey = `combo3_${selectedFlavors[1]}_${selectedFlavors[2]}_${selectedFlavors[3]}`;
+
+            // 動態添加這個組合到菜單（如果不存在）
+            if (!menu[comboKey]) {
+                menu[comboKey] = {
+                    name: `3條魚套餐 (${flavorCombo})`,
+                    price: 120
+                };
+            }
+
+            // 加入購物車
+            if (!currentOrder[comboKey]) {
+                currentOrder[comboKey] = 0;
+            }
+            currentOrder[comboKey]++;
+
+            updateOrderDisplay();
+            closeFlavorModal();
+        }
+
+        // 開啟2條魚口味選擇視窗
+        function openFlavorModal2() {
+            // 重置選擇狀態
+            selectedFlavors2 = { 1: 'peanut', 2: 'peanut' };
+
+            // 重置按鈕選擇狀態
+            document.querySelectorAll('#flavorModal2 .flavor-selection').forEach((section, index) => {
+                const buttons = section.querySelectorAll('.flavor-option');
+                buttons.forEach(btn => btn.classList.remove('selected'));
+                buttons[0].classList.add('selected'); // 預設選擇花生
+            });
+
+            document.getElementById('flavorModal2').classList.add('show');
+        }
+
+        // 關閉2條魚口味選擇視窗
+        function closeFlavorModal2() {
+            document.getElementById('flavorModal2').classList.remove('show');
+        }
+
+        // 選擇口味 (2條魚)
+        function selectFlavor2(fishNumber, flavor, button) {
+            selectedFlavors2[fishNumber] = flavor;
+
+            // 更新按鈕狀態
+            const parent = button.parentElement;
+            parent.querySelectorAll('.flavor-option').forEach(btn => {
+                btn.classList.remove('selected');
+            });
+            button.classList.add('selected');
+        }
+
+        // 確認2條魚口味選擇並加入購物車
+        function confirmFlavorSelection2() {
+            // 產生口味組合的顯示名稱
+            const flavorCombo = `${flavorNames[selectedFlavors2[1]]}/${flavorNames[selectedFlavors2[2]]}`;
+            const comboKey = `combo2drink_${selectedFlavors2[1]}_${selectedFlavors2[2]}`;
+
+            // 動態添加這個組合到菜單（如果不存在）
+            if (!menu[comboKey]) {
+                menu[comboKey] = {
+                    name: `2條魚+飲料 (${flavorCombo})`,
+                    price: 100
+                };
+            }
+
+            // 加入購物車
+            if (!currentOrder[comboKey]) {
+                currentOrder[comboKey] = 0;
+            }
+            currentOrder[comboKey]++;
+
+            updateOrderDisplay();
+            closeFlavorModal2();
+        }
+
+        // 更新訂單數量
+        function updateQty(itemId, change) {
+            currentOrder[itemId] += change;
             
-            console.log('所有依賴已載入，開始渲染應用程式');
+            if (currentOrder[itemId] <= 0) {
+                delete currentOrder[itemId];
+            }
+            
+            updateOrderDisplay();
+        }
+
+        // 更新訂單顯示
+        function updateOrderDisplay() {
+            const orderItems = document.getElementById('orderItems');
+            const totalAmount = document.getElementById('totalAmount');
+            const totalQty = document.getElementById('totalQty');
+            const checkoutBtn = document.getElementById('checkoutBtn');
+            
+            // 計算總計
+            let total = 0;
+            let qty = 0;
+            
+            for (let itemId in currentOrder) {
+                total += menu[itemId].price * currentOrder[itemId];
+                qty += currentOrder[itemId];
+            }
+            
+            // 更新顯示
+            totalAmount.textContent = `$${total}`;
+            totalQty.textContent = qty;
+            
+            // 更新按鈕狀態
+            if (total > 0) {
+                checkoutBtn.classList.add('active');
+                checkoutBtn.style.cursor = 'pointer';
+            } else {
+                checkoutBtn.classList.remove('active');
+                checkoutBtn.style.cursor = 'not-allowed';
+            }
+            
+            // 顯示訂單項目
+            if (Object.keys(currentOrder).length === 0) {
+                orderItems.innerHTML = `
+                    <div class="empty-cart">
+                        <div class="empty-cart-icon">🛒</div>
+                        <div class="empty-cart-text">尚未添加品項</div>
+                    </div>
+                `;
+            } else {
+                let html = '';
+                for (let itemId in currentOrder) {
+                    const item = menu[itemId];
+                    const itemQty = currentOrder[itemId];
+                    const itemTotal = item.price * itemQty;
+                    
+                    html += `
+                        <div class="order-item">
+                            <div class="order-item-info">
+                                <div class="order-item-name">${item.name}</div>
+                                <div class="order-item-price">$${item.price}</div>
+                            </div>
+                            <div class="order-item-controls">
+                                <button class="qty-btn" onclick="updateQty('${itemId}', -1)">−</button>
+                                <div class="qty-display">${itemQty}</div>
+                                <button class="qty-btn" onclick="updateQty('${itemId}', 1)">+</button>
+                            </div>
+                            <div class="order-item-total">$${itemTotal}</div>
+                        </div>
+                    `;
+                }
+                orderItems.innerHTML = html;
+            }
+        }
+
+        // 清空購物車
+        function clearCart() {
+            if (Object.keys(currentOrder).length === 0) return;
+            
+            if (confirm('確定要清空當前訂單嗎？')) {
+                currentOrder = {};
+                updateOrderDisplay();
+            }
+        }
+
+        // 結帳
+        async function checkout() {
+            const total = calculateTotal();
+            
+            if (total === 0) return;
+            
             try {
-                ReactDOM.render(<AddressRoutePlanner />, document.getElementById('root'));
+                await saveOrder();
+                
+                currentOrder = {};
+                updateOrderDisplay();
+                
+                alert(`結帳成功！\n總金額：$${total}\n已儲存至雲端`);
             } catch (error) {
-                console.error('渲染錯誤:', error);
-                document.getElementById('root').innerHTML = `
-                    <div style="padding: 20px; background: #fee; border: 1px solid #fcc; border-radius: 8px; margin: 20px;">
-                        <h2 style="color: #c33;">渲染錯誤</h2>
-                        <p>錯誤訊息: ${error.message}</p>
-                        <p>請檢查瀏覽器控制台以獲取更多詳細資訊。</p>
+                alert('結帳失敗：' + error.message);
+            }
+        }
+
+        // 計算總額
+        function calculateTotal() {
+            let total = 0;
+            for (let itemId in currentOrder) {
+                total += menu[itemId].price * currentOrder[itemId];
+            }
+            return total;
+        }
+
+        // 儲存訂單
+        async function saveOrder() {
+            const todayKey = getTodayKey();
+            
+            try {
+                const result = await window.storage.get(todayKey, true);
+                let todayData;
+                
+                if (result && result.value) {
+                    todayData = JSON.parse(result.value);
+                } else {
+                    todayData = {
+                        date: todayKey,
+                        orders: [],
+                        totalRevenue: 0,
+                        itemSales: {},
+                        timeSales: {}
+                    };
+                }
+                
+                const order = {
+                    timestamp: new Date().toISOString(),
+                    items: { ...currentOrder },
+                    total: calculateTotal()
+                };
+                
+                todayData.orders.push(order);
+                todayData.totalRevenue += order.total;
+                
+                for (let itemId in currentOrder) {
+                    if (!todayData.itemSales[itemId]) {
+                        todayData.itemSales[itemId] = 0;
+                    }
+                    todayData.itemSales[itemId] += currentOrder[itemId];
+                }
+                
+                const hour = new Date().getHours();
+                const timeSlot = `${String(hour).padStart(2, '0')}:00`;
+                if (!todayData.timeSales[timeSlot]) {
+                    todayData.timeSales[timeSlot] = 0;
+                }
+                todayData.timeSales[timeSlot] += order.total;
+                
+                await window.storage.set(todayKey, JSON.stringify(todayData), true);
+            } catch (error) {
+                throw new Error('儲存訂單失敗');
+            }
+        }
+
+        // 切換分頁
+        async function switchTab(tabName) {
+            document.querySelectorAll('.nav-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            if (tabName === 'order') {
+                document.getElementById('orderPage').style.display = 'flex';
+                document.getElementById('reportPage').style.display = 'none';
+            } else if (tabName === 'report') {
+                document.getElementById('orderPage').style.display = 'none';
+                document.getElementById('reportPage').style.display = 'block';
+                await loadReport();
+            }
+        }
+
+        // 載入報表
+        async function loadReport() {
+            const reportContent = document.getElementById('reportContent');
+            reportContent.innerHTML = '<div class="loading">載入中...</div>';
+            
+            try {
+                const todayKey = getTodayKey();
+                const result = await window.storage.get(todayKey, true);
+                
+                if (!result || !result.value) {
+                    reportContent.innerHTML = `
+                        <div class="empty-state">
+                            <div class="empty-state-icon">📊</div>
+                            <div>今日尚無營業資料</div>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                const data = JSON.parse(result.value);
+                
+                let html = `
+                    <div class="report-cards">
+                        <div class="report-card">
+                            <h3>今日總營收</h3>
+                            <div class="value">$${data.totalRevenue.toLocaleString()}</div>
+                        </div>
+                        
+                        <div class="report-card">
+                            <h3>訂單數量</h3>
+                            <div class="value">${data.orders.length} 筆</div>
+                        </div>
+                        
+                        <div class="report-card">
+                            <h3>平均客單價</h3>
+                            <div class="value">$${data.orders.length > 0 ? Math.round(data.totalRevenue / data.orders.length) : 0}</div>
+                        </div>
+                    </div>
+                `;
+                
+                if (Object.keys(data.itemSales).length > 0) {
+                    html += '<div class="report-section"><h3>品項銷售排行</h3>';
+                    
+                    const sortedItems = Object.entries(data.itemSales)
+                        .sort((a, b) => b[1] - a[1]);
+                    
+                    for (let [itemId, qty] of sortedItems) {
+                        const revenue = menu[itemId].price * qty;
+                        html += `
+                            <div class="sales-item">
+                                <span class="sales-item-name">${menu[itemId].name}</span>
+                                <span class="sales-item-qty">${qty} 份 / $${revenue}</span>
+                            </div>
+                        `;
+                    }
+                    
+                    html += '</div>';
+                }
+                
+                if (Object.keys(data.timeSales).length > 0) {
+                    html += '<div class="report-section"><h3>時段銷售分析</h3>';
+                    
+                    const sortedTimes = Object.entries(data.timeSales)
+                        .sort((a, b) => a[0].localeCompare(b[0]));
+                    
+                    for (let [time, amount] of sortedTimes) {
+                        html += `
+                            <div class="time-slot">
+                                <span class="time-slot-time">${time} - ${parseInt(time.split(':')[0]) + 1}:00</span>
+                                <span class="time-slot-amount">$${amount}</span>
+                            </div>
+                        `;
+                    }
+                    
+                    html += '</div>';
+                }
+                
+                html += `
+                    <button class="clear-data-btn" onclick="clearTodayData()">
+                        清除今日資料
+                    </button>
+                `;
+                
+                reportContent.innerHTML = html;
+                
+            } catch (error) {
+                reportContent.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">⚠️</div>
+                        <div>載入報表失敗</div>
                     </div>
                 `;
             }
         }
-        
-        // 開始等待依賴
-        waitForDependencies();
+
+        // 清除今日資料
+        async function clearTodayData() {
+            if (!confirm('確定要清除今日所有營業資料嗎？此操作無法復原！')) {
+                return;
+            }
+            
+            try {
+                const todayKey = getTodayKey();
+                await window.storage.delete(todayKey, true);
+                await initStorage();
+                await loadReport();
+                alert('已清除今日資料');
+            } catch (error) {
+                alert('清除失敗：' + error.message);
+            }
+        }
+
+        window.addEventListener('load', init);
     </script>
 </body>
 </html>

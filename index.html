@@ -572,19 +572,136 @@
             transform: scale(0.98);
         }
 
+        /* 手機底部導航列 */
+        .mobile-nav {
+            display: none;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+            z-index: 100;
+            padding: 8px 0;
+            padding-bottom: max(8px, env(safe-area-inset-bottom));
+        }
+
+        .mobile-nav-items {
+            display: flex;
+            justify-content: space-around;
+        }
+
+        .mobile-nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            padding: 8px 16px;
+            background: none;
+            border: none;
+            color: #666;
+            font-size: 12px;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: all 0.2s;
+        }
+
+        .mobile-nav-item.active {
+            color: #ff6a3d;
+            background: #fff5f2;
+        }
+
+        .mobile-nav-item .nav-icon {
+            font-size: 24px;
+        }
+
+        /* 手機版購物車浮動按鈕 */
+        .mobile-cart-fab {
+            display: none;
+            position: fixed;
+            bottom: 80px;
+            right: 16px;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #ff9a56 0%, #ff6a3d 100%);
+            border-radius: 50%;
+            box-shadow: 0 4px 15px rgba(255, 106, 61, 0.4);
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            z-index: 99;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .mobile-cart-fab .cart-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: #dc3545;
+            color: white;
+            font-size: 14px;
+            font-weight: bold;
+            min-width: 24px;
+            height: 24px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* 手機版訂單全螢幕 */
+        .order-area.mobile-fullscreen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 200;
+            display: flex;
+        }
+
+        .order-area.mobile-fullscreen .order-header {
+            padding-top: max(20px, env(safe-area-inset-top));
+        }
+
+        .order-area.mobile-fullscreen .order-summary {
+            padding-bottom: max(20px, env(safe-area-inset-bottom));
+        }
+
+        .mobile-back-btn {
+            display: none;
+            padding: 8px 12px;
+            background: #f5f5f5;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            color: #666;
+        }
+
         /* 響應式設計 */
         @media (max-width: 768px) {
-            .main-content {
-                flex-direction: column;
+            .top-nav {
+                height: 60px;
+                padding: 0 12px;
             }
 
-            .order-area {
-                width: 100%;
-                height: 50vh;
+            .logo {
+                width: 40px;
+                height: 40px;
+                font-size: 22px;
             }
 
-            .products-grid {
-                grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            .logo-text h1 {
+                font-size: 16px;
+            }
+
+            .date-display {
+                font-size: 11px;
             }
 
             .nav-tabs {
@@ -592,7 +709,154 @@
             }
 
             .current-time {
+                font-size: 14px;
+            }
+
+            .main-content {
+                flex-direction: column;
+                height: calc(100vh - 60px);
+                padding-bottom: 70px;
+            }
+
+            .mobile-nav {
+                display: block;
+            }
+
+            .mobile-cart-fab {
+                display: flex;
+            }
+
+            .products-area {
+                flex: 1;
+                padding: 12px;
+                overflow-y: auto;
+            }
+
+            .section-header {
                 font-size: 16px;
+                margin-bottom: 12px;
+            }
+
+            .products-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 10px;
+            }
+
+            .product-card {
+                padding: 12px;
+                border-radius: 10px;
+            }
+
+            .product-image {
+                width: 70px;
+                height: 70px;
+                margin-bottom: 10px;
+            }
+
+            .product-name {
+                font-size: 14px;
+                margin-bottom: 5px;
+            }
+
+            .product-price {
+                font-size: 16px;
+            }
+
+            /* 手機版隱藏右側訂單區 */
+            .order-area {
+                display: none;
+            }
+
+            .order-area.mobile-fullscreen {
+                display: flex;
+            }
+
+            .order-area.mobile-fullscreen .mobile-back-btn {
+                display: block;
+            }
+
+            /* 報表頁面手機版 */
+            .report-content {
+                padding: 15px;
+            }
+
+            .report-cards {
+                grid-template-columns: 1fr;
+                gap: 12px;
+            }
+
+            .report-card {
+                padding: 20px;
+            }
+
+            .report-card .value {
+                font-size: 28px;
+            }
+
+            .report-section {
+                padding: 15px;
+                border-radius: 12px;
+            }
+
+            /* 口味選擇彈窗手機版 */
+            .flavor-modal-content {
+                width: 95%;
+                max-height: 90vh;
+                padding: 20px;
+            }
+
+            .flavor-option {
+                padding: 10px 6px;
+                font-size: 13px;
+            }
+
+            /* 訂單項目手機版 */
+            .order-item {
+                padding: 12px;
+                gap: 10px;
+            }
+
+            .order-item-name {
+                font-size: 14px;
+            }
+
+            .qty-btn {
+                width: 36px;
+                height: 36px;
+            }
+
+            .total-amount {
+                font-size: 24px;
+            }
+
+            .checkout-btn {
+                padding: 16px;
+                font-size: 16px;
+            }
+        }
+
+        /* 小螢幕手機 */
+        @media (max-width: 375px) {
+            .products-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 8px;
+            }
+
+            .product-card {
+                padding: 10px;
+            }
+
+            .product-image {
+                width: 60px;
+                height: 60px;
+            }
+
+            .product-name {
+                font-size: 13px;
+            }
+
+            .product-price {
+                font-size: 15px;
             }
         }
     </style>
@@ -679,6 +943,7 @@
             <!-- 右側訂單區 -->
             <div class="order-area">
                 <div class="order-header">
+                    <button class="mobile-back-btn" onclick="closeMobileCart()">← 返回</button>
                     <div class="order-title">
                         📝 當前訂單
                     </div>
@@ -784,6 +1049,26 @@
             <button class="flavor-confirm-btn" onclick="confirmFlavorSelection2()">確認加入購物車</button>
         </div>
     </div>
+
+    <!-- 手機版底部導航 -->
+    <nav class="mobile-nav">
+        <div class="mobile-nav-items">
+            <button class="mobile-nav-item active" onclick="switchTabMobile('order')">
+                <span class="nav-icon">🛒</span>
+                <span>點餐</span>
+            </button>
+            <button class="mobile-nav-item" onclick="switchTabMobile('report')">
+                <span class="nav-icon">📊</span>
+                <span>報表</span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- 手機版購物車浮動按鈕 -->
+    <button class="mobile-cart-fab" id="mobileCartFab" onclick="openMobileCart()">
+        🛒
+        <span class="cart-badge" id="cartBadge" style="display: none;">0</span>
+    </button>
 
     <script>
         // 菜單定義
@@ -1086,6 +1371,9 @@
                 }
                 orderItems.innerHTML = html;
             }
+
+            // 更新手機版購物車徽章
+            updateCartBadge();
         }
 
         // 清空購物車
@@ -1101,15 +1389,18 @@
         // 結帳
         async function checkout() {
             const total = calculateTotal();
-            
+
             if (total === 0) return;
-            
+
             try {
                 await saveOrder();
-                
+
                 currentOrder = {};
                 updateOrderDisplay();
-                
+
+                // 結帳成功後關閉手機版購物車
+                closeMobileCart();
+
                 alert(`結帳成功！\n總金額：$${total}\n已儲存至雲端`);
             } catch (error) {
                 alert('結帳失敗：' + error.message);
@@ -1300,6 +1591,59 @@
                 alert('已清除今日資料');
             } catch (error) {
                 alert('清除失敗：' + error.message);
+            }
+        }
+
+        // 手機版：開啟購物車
+        function openMobileCart() {
+            document.querySelector('.order-area').classList.add('mobile-fullscreen');
+            document.body.style.overflow = 'hidden';
+        }
+
+        // 手機版：關閉購物車
+        function closeMobileCart() {
+            document.querySelector('.order-area').classList.remove('mobile-fullscreen');
+            document.body.style.overflow = '';
+        }
+
+        // 手機版：切換分頁
+        function switchTabMobile(tabName) {
+            // 更新底部導航狀態
+            document.querySelectorAll('.mobile-nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            event.target.closest('.mobile-nav-item').classList.add('active');
+
+            // 切換頁面
+            const orderPage = document.getElementById('orderPage');
+            const reportPage = document.getElementById('reportPage');
+            const mobileCartFab = document.getElementById('mobileCartFab');
+
+            if (tabName === 'order') {
+                orderPage.style.display = 'flex';
+                reportPage.style.display = 'none';
+                mobileCartFab.style.display = 'flex';
+            } else if (tabName === 'report') {
+                orderPage.style.display = 'none';
+                reportPage.style.display = 'block';
+                mobileCartFab.style.display = 'none';
+                loadReport();
+            }
+        }
+
+        // 更新購物車徽章
+        function updateCartBadge() {
+            let qty = 0;
+            for (let itemId in currentOrder) {
+                qty += currentOrder[itemId];
+            }
+
+            const badge = document.getElementById('cartBadge');
+            if (qty > 0) {
+                badge.textContent = qty;
+                badge.style.display = 'flex';
+            } else {
+                badge.style.display = 'none';
             }
         }
 

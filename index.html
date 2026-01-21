@@ -572,6 +572,262 @@
             transform: scale(0.98);
         }
 
+        .flavor-confirm-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        /* 付款確認視窗樣式 */
+        .payment-info {
+            margin-bottom: 20px;
+        }
+
+        .payment-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .payment-row:first-child {
+            padding-top: 0;
+        }
+
+        .payment-label {
+            font-size: 16px;
+            color: #666;
+            font-weight: 500;
+        }
+
+        .payment-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #ff6a3d;
+        }
+
+        .payment-input-section {
+            padding: 15px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .payment-input-section .payment-label {
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        .payment-input {
+            width: 100%;
+            padding: 15px;
+            font-size: 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            text-align: center;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .payment-input:focus {
+            border-color: #ff6a3d;
+        }
+
+        .change-row {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .change-value {
+            color: #28a745;
+            font-size: 28px;
+        }
+
+        .change-value.negative {
+            color: #dc3545;
+        }
+
+        .quick-pay-buttons {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .quick-pay-btn {
+            padding: 12px 8px;
+            background: #f5f5f5;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .quick-pay-btn:hover {
+            border-color: #ff6a3d;
+            background: #fff5f2;
+        }
+
+        .quick-pay-btn:active {
+            transform: scale(0.95);
+        }
+
+        /* 銷售紀錄樣式 */
+        .sales-record {
+            background: white;
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .sales-record-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .sales-record-time {
+            font-size: 14px;
+            color: #666;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .sales-record-total {
+            font-size: 18px;
+            font-weight: bold;
+            color: #ff6a3d;
+        }
+
+        .sales-record-items {
+            font-size: 14px;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .sales-record-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 4px 0;
+        }
+
+        /* 時間範圍切換標籤 */
+        .period-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 25px;
+            background: white;
+            padding: 8px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .period-tab {
+            flex: 1;
+            padding: 12px 20px;
+            border: none;
+            background: #f5f5f5;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            color: #666;
+        }
+
+        .period-tab:hover {
+            background: #eee;
+        }
+
+        .period-tab.active {
+            background: linear-gradient(135deg, #ff9a56 0%, #ff6a3d 100%);
+            color: white;
+        }
+
+        /* 圓餅圖容器 */
+        .pie-chart-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .pie-chart-wrapper {
+            position: relative;
+            width: 250px;
+            height: 250px;
+            margin-bottom: 20px;
+        }
+
+        .pie-chart {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            transform: rotate(-90deg);
+        }
+
+        .pie-chart-center {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 120px;
+            height: 120px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .pie-chart-center-label {
+            font-size: 12px;
+            color: #666;
+        }
+
+        .pie-chart-center-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .pie-chart-legend {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+            width: 100%;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+        }
+
+        .legend-color {
+            width: 16px;
+            height: 16px;
+            border-radius: 4px;
+        }
+
+        .legend-text {
+            color: #333;
+        }
+
+        .legend-value {
+            font-weight: bold;
+            color: #666;
+        }
+
         /* 手機底部導航列 */
         .mobile-nav {
             display: none;
@@ -973,9 +1229,25 @@
             </div>
         </div>
 
+        <!-- 銷售紀錄頁面 -->
+        <div id="salesPage" style="display: none; width: 100%; overflow-y: auto;">
+            <div class="report-content">
+                <div class="section-header" style="margin-bottom: 20px;">
+                    📋 今日銷售紀錄
+                </div>
+                <div id="salesContent" class="loading">載入中...</div>
+            </div>
+        </div>
+
         <!-- 報表頁面 -->
         <div id="reportPage" style="display: none; width: 100%; overflow-y: auto;">
             <div class="report-content">
+                <!-- 時間範圍切換 -->
+                <div class="period-tabs">
+                    <button class="period-tab active" onclick="switchPeriod('day')">今日</button>
+                    <button class="period-tab" onclick="switchPeriod('week')">本週</button>
+                    <button class="period-tab" onclick="switchPeriod('month')">本月</button>
+                </div>
                 <div id="reportContent" class="loading">載入中...</div>
             </div>
         </div>
@@ -1050,12 +1322,52 @@
         </div>
     </div>
 
+    <!-- 付款確認彈出視窗 -->
+    <div class="flavor-modal" id="paymentModal">
+        <div class="flavor-modal-content">
+            <div class="flavor-modal-header">
+                <div class="flavor-modal-title">💰 付款確認</div>
+                <button class="flavor-modal-close" onclick="closePaymentModal()">✕</button>
+            </div>
+
+            <div class="payment-info">
+                <div class="payment-row">
+                    <span class="payment-label">應付金額</span>
+                    <span class="payment-value" id="paymentTotal">$0</span>
+                </div>
+
+                <div class="payment-input-section">
+                    <label class="payment-label">客人付款金額</label>
+                    <input type="number" id="customerPaid" class="payment-input" placeholder="請輸入金額" oninput="calculateChange()">
+                </div>
+
+                <div class="payment-row change-row">
+                    <span class="payment-label">應找零錢</span>
+                    <span class="payment-value change-value" id="changeAmount">$0</span>
+                </div>
+            </div>
+
+            <div class="quick-pay-buttons">
+                <button class="quick-pay-btn" onclick="setQuickPay(50)">$50</button>
+                <button class="quick-pay-btn" onclick="setQuickPay(100)">$100</button>
+                <button class="quick-pay-btn" onclick="setQuickPay(500)">$500</button>
+                <button class="quick-pay-btn" onclick="setQuickPay(1000)">$1000</button>
+            </div>
+
+            <button class="flavor-confirm-btn" id="confirmPaymentBtn" onclick="confirmPayment()" disabled>確認收款</button>
+        </div>
+    </div>
+
     <!-- 手機版底部導航 -->
     <nav class="mobile-nav">
         <div class="mobile-nav-items">
             <button class="mobile-nav-item active" onclick="switchTabMobile('order')">
                 <span class="nav-icon">🛒</span>
                 <span>點餐</span>
+            </button>
+            <button class="mobile-nav-item" onclick="switchTabMobile('sales')">
+                <span class="nav-icon">📋</span>
+                <span>紀錄</span>
             </button>
             <button class="mobile-nav-item" onclick="switchTabMobile('report')">
                 <span class="nav-icon">📊</span>
@@ -1071,6 +1383,9 @@
     </button>
 
     <script>
+        // Google Sheets API 端點
+        const API_URL = 'https://script.google.com/macros/s/AKfycbzE0aMTM5aRBkERU-VVIf06_oUHzsHBHPPGw52Md-0ALyPOyvhhZtHi0pM4AId41GxI/exec';
+
         // 菜單定義
         const menu = {
             redbean: { name: '紅豆鯛魚燒', price: 50 },
@@ -1144,19 +1459,77 @@
         async function initStorage() {
             try {
                 const todayKey = getTodayKey();
-                const todayData = await window.storage.get(todayKey, true);
-                
+                const todayData = await apiGet(todayKey);
+
                 if (!todayData) {
-                    await window.storage.set(todayKey, JSON.stringify({
+                    await apiSet(todayKey, {
                         date: todayKey,
                         orders: [],
                         totalRevenue: 0,
                         itemSales: {},
                         timeSales: {}
-                    }), true);
+                    });
                 }
             } catch (error) {
                 console.log('初始化儲存失敗:', error);
+            }
+        }
+
+        // API 讀取資料
+        async function apiGet(key) {
+            try {
+                const response = await fetch(`${API_URL}?action=get&key=${encodeURIComponent(key)}`);
+                const result = await response.json();
+                if (result.success && result.data) {
+                    return result.data;
+                }
+                return null;
+            } catch (error) {
+                console.error('API GET 錯誤:', error);
+                return null;
+            }
+        }
+
+        // API 儲存資料
+        async function apiSet(key, data) {
+            try {
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        action: 'set',
+                        key: key,
+                        data: data
+                    })
+                });
+                const result = await response.json();
+                return result.success;
+            } catch (error) {
+                console.error('API SET 錯誤:', error);
+                return false;
+            }
+        }
+
+        // API 刪除資料
+        async function apiDelete(key) {
+            try {
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        action: 'delete',
+                        key: key
+                    })
+                });
+                const result = await response.json();
+                return result.success;
+            } catch (error) {
+                console.error('API DELETE 錯誤:', error);
+                return false;
             }
         }
 
@@ -1386,22 +1759,92 @@
             }
         }
 
-        // 結帳
-        async function checkout() {
+        // 結帳 - 開啟付款確認視窗
+        function checkout() {
             const total = calculateTotal();
 
             if (total === 0) return;
 
+            // 顯示付款視窗
+            openPaymentModal(total);
+        }
+
+        // 開啟付款確認視窗
+        function openPaymentModal(total) {
+            document.getElementById('paymentTotal').textContent = `$${total}`;
+            document.getElementById('customerPaid').value = '';
+            document.getElementById('changeAmount').textContent = '$0';
+            document.getElementById('changeAmount').classList.remove('negative');
+            document.getElementById('confirmPaymentBtn').disabled = true;
+            document.getElementById('paymentModal').classList.add('show');
+
+            // 自動聚焦到輸入框
+            setTimeout(() => {
+                document.getElementById('customerPaid').focus();
+            }, 100);
+        }
+
+        // 關閉付款確認視窗
+        function closePaymentModal() {
+            document.getElementById('paymentModal').classList.remove('show');
+        }
+
+        // 計算找零
+        function calculateChange() {
+            const total = calculateTotal();
+            const paid = parseInt(document.getElementById('customerPaid').value) || 0;
+            const change = paid - total;
+
+            const changeEl = document.getElementById('changeAmount');
+            const confirmBtn = document.getElementById('confirmPaymentBtn');
+
+            if (paid > 0) {
+                changeEl.textContent = `$${change}`;
+
+                if (change < 0) {
+                    changeEl.classList.add('negative');
+                    confirmBtn.disabled = true;
+                } else {
+                    changeEl.classList.remove('negative');
+                    confirmBtn.disabled = false;
+                }
+            } else {
+                changeEl.textContent = '$0';
+                changeEl.classList.remove('negative');
+                confirmBtn.disabled = true;
+            }
+        }
+
+        // 快速付款金額按鈕
+        function setQuickPay(amount) {
+            document.getElementById('customerPaid').value = amount;
+            calculateChange();
+        }
+
+        // 確認付款並完成結帳
+        async function confirmPayment() {
+            const total = calculateTotal();
+            const paid = parseInt(document.getElementById('customerPaid').value) || 0;
+            const change = paid - total;
+
+            if (paid < total) {
+                alert('付款金額不足！');
+                return;
+            }
+
             try {
-                await saveOrder();
+                await saveOrderSimple();
 
                 currentOrder = {};
                 updateOrderDisplay();
 
+                // 關閉付款視窗
+                closePaymentModal();
+
                 // 結帳成功後關閉手機版購物車
                 closeMobileCart();
 
-                alert(`結帳成功！\n總金額：$${total}\n已儲存至雲端`);
+                alert(`結帳成功！\n總金額：$${total}\n收款：$${paid}\n找零：$${change}\n已儲存至雲端`);
             } catch (error) {
                 alert('結帳失敗：' + error.message);
             }
@@ -1416,17 +1859,50 @@
             return total;
         }
 
+        // 簡化儲存訂單（直接送到 Google Sheets）
+        async function saveOrderSimple() {
+            const items = [];
+
+            for (let itemId in currentOrder) {
+                items.push({
+                    name: menu[itemId].name,
+                    qty: currentOrder[itemId]
+                });
+            }
+
+            const payload = {
+                total: calculateTotal(),
+                items: items
+            };
+
+            try {
+                const response = await fetch(API_URL, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "text/plain"
+                    },
+                    body: JSON.stringify(payload)
+                });
+
+                const result = await response.json();
+                if (!result.success) {
+                    throw new Error(result.error || '儲存失敗');
+                }
+                return result;
+            } catch (error) {
+                console.error('儲存訂單錯誤:', error);
+                throw error;
+            }
+        }
+
         // 儲存訂單
         async function saveOrder() {
             const todayKey = getTodayKey();
-            
+
             try {
-                const result = await window.storage.get(todayKey, true);
-                let todayData;
-                
-                if (result && result.value) {
-                    todayData = JSON.parse(result.value);
-                } else {
+                let todayData = await apiGet(todayKey);
+
+                if (!todayData) {
                     todayData = {
                         date: todayKey,
                         orders: [],
@@ -1435,31 +1911,31 @@
                         timeSales: {}
                     };
                 }
-                
+
                 const order = {
                     timestamp: new Date().toISOString(),
                     items: { ...currentOrder },
                     total: calculateTotal()
                 };
-                
+
                 todayData.orders.push(order);
                 todayData.totalRevenue += order.total;
-                
+
                 for (let itemId in currentOrder) {
                     if (!todayData.itemSales[itemId]) {
                         todayData.itemSales[itemId] = 0;
                     }
                     todayData.itemSales[itemId] += currentOrder[itemId];
                 }
-                
+
                 const hour = new Date().getHours();
                 const timeSlot = `${String(hour).padStart(2, '0')}:00`;
                 if (!todayData.timeSales[timeSlot]) {
                     todayData.timeSales[timeSlot] = 0;
                 }
                 todayData.timeSales[timeSlot] += order.total;
-                
-                await window.storage.set(todayKey, JSON.stringify(todayData), true);
+
+                await apiSet(todayKey, todayData);
             } catch (error) {
                 throw new Error('儲存訂單失敗');
             }
@@ -1471,110 +1947,300 @@
                 tab.classList.remove('active');
             });
             event.target.classList.add('active');
-            
+
+            const orderPage = document.getElementById('orderPage');
+            const salesPage = document.getElementById('salesPage');
+            const reportPage = document.getElementById('reportPage');
+
+            orderPage.style.display = 'none';
+            salesPage.style.display = 'none';
+            reportPage.style.display = 'none';
+
             if (tabName === 'order') {
-                document.getElementById('orderPage').style.display = 'flex';
-                document.getElementById('reportPage').style.display = 'none';
+                orderPage.style.display = 'flex';
+            } else if (tabName === 'sales') {
+                salesPage.style.display = 'block';
+                await loadSalesRecords();
             } else if (tabName === 'report') {
-                document.getElementById('orderPage').style.display = 'none';
-                document.getElementById('reportPage').style.display = 'block';
+                reportPage.style.display = 'block';
                 await loadReport();
             }
+        }
+
+        // 當前報表時間範圍
+        let currentPeriod = 'day';
+
+        // 載入銷售紀錄
+        async function loadSalesRecords() {
+            const salesContent = document.getElementById('salesContent');
+            salesContent.innerHTML = '<div class="loading">載入中...</div>';
+
+            try {
+                const response = await fetch(`${API_URL}?action=getOrders`);
+
+                if (!response.ok) {
+                    throw new Error(`HTTP 錯誤: ${response.status}`);
+                }
+
+                const result = await response.json();
+                console.log('銷售紀錄:', result);
+
+                if (!result.success) {
+                    throw new Error(result.error || '取得資料失敗');
+                }
+
+                if (!result.data || result.data.length === 0) {
+                    salesContent.innerHTML = `
+                        <div class="empty-state">
+                            <div class="empty-state-icon">📋</div>
+                            <div>今日尚無銷售紀錄</div>
+                        </div>
+                    `;
+                    return;
+                }
+
+                let html = '';
+                const orders = result.data;
+
+                // 按時間倒序顯示
+                orders.reverse().forEach((order, index) => {
+                    html += `
+                        <div class="sales-record">
+                            <div class="sales-record-header">
+                                <div class="sales-record-time">
+                                    🕐 ${order.time}
+                                </div>
+                                <div class="sales-record-total">$${order.total}</div>
+                            </div>
+                            <div class="sales-record-items">
+                                ${order.items.map(item => `
+                                    <div class="sales-record-item">
+                                        <span>${item.name}</span>
+                                        <span>x${item.qty}</span>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                    `;
+                });
+
+                salesContent.innerHTML = html;
+
+            } catch (error) {
+                console.error('載入銷售紀錄錯誤:', error);
+                salesContent.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">⚠️</div>
+                        <div>載入銷售紀錄失敗</div>
+                        <div style="font-size: 12px; margin-top: 10px; color: #999;">${error.message}</div>
+                    </div>
+                `;
+            }
+        }
+
+        // 切換報表時間範圍
+        function switchPeriod(period) {
+            currentPeriod = period;
+
+            document.querySelectorAll('.period-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            event.target.classList.add('active');
+
+            loadReport();
         }
 
         // 載入報表
         async function loadReport() {
             const reportContent = document.getElementById('reportContent');
             reportContent.innerHTML = '<div class="loading">載入中...</div>';
-            
+
             try {
-                const todayKey = getTodayKey();
-                const result = await window.storage.get(todayKey, true);
-                
-                if (!result || !result.value) {
+                const response = await fetch(`${API_URL}?action=getReport&period=${currentPeriod}`);
+
+                if (!response.ok) {
+                    throw new Error(`HTTP 錯誤: ${response.status}`);
+                }
+
+                const result = await response.json();
+                console.log('報表資料:', result);
+
+                if (!result.success) {
+                    throw new Error(result.error || '取得資料失敗');
+                }
+
+                if (!result.data || result.data.orderCount === 0) {
+                    const periodText = currentPeriod === 'day' ? '今日' : (currentPeriod === 'week' ? '本週' : '本月');
                     reportContent.innerHTML = `
                         <div class="empty-state">
                             <div class="empty-state-icon">📊</div>
-                            <div>今日尚無營業資料</div>
+                            <div>${periodText}尚無營業資料</div>
                         </div>
                     `;
                     return;
                 }
-                
-                const data = JSON.parse(result.value);
-                
+
+                const data = result.data;
+                const periodText = currentPeriod === 'day' ? '今日' : (currentPeriod === 'week' ? '本週' : '本月');
+
+                // 計算三種鯛魚燒的銷售數量
+                const fishSales = {
+                    '花生鯛魚燒': 0,
+                    '紅豆鯛魚燒': 0,
+                    '卡士達鯛魚燒': 0
+                };
+
+                if (data.itemSales) {
+                    for (let [itemName, qty] of Object.entries(data.itemSales)) {
+                        // 檢查是否為套餐（包含括號）
+                        const comboMatch = itemName.match(/\((.+)\)/);
+
+                        if (comboMatch) {
+                            // 套餐：解析括號內的口味，例如 "花生/卡士達/紅豆"
+                            const flavors = comboMatch[1].split('/');
+                            flavors.forEach(flavor => {
+                                const f = flavor.trim();
+                                if (f === '花生') {
+                                    fishSales['花生鯛魚燒'] += qty;
+                                } else if (f === '紅豆') {
+                                    fishSales['紅豆鯛魚燒'] += qty;
+                                } else if (f === '卡士達') {
+                                    fishSales['卡士達鯛魚燒'] += qty;
+                                }
+                            });
+                        } else {
+                            // 單品：直接判斷品項名稱
+                            if (itemName === '花生鯛魚燒') {
+                                fishSales['花生鯛魚燒'] += qty;
+                            } else if (itemName === '紅豆鯛魚燒') {
+                                fishSales['紅豆鯛魚燒'] += qty;
+                            } else if (itemName === '卡士達鯛魚燒') {
+                                fishSales['卡士達鯛魚燒'] += qty;
+                            }
+                        }
+                    }
+                }
+
+                const totalFish = fishSales['花生鯛魚燒'] + fishSales['紅豆鯛魚燒'] + fishSales['卡士達鯛魚燒'];
+
                 let html = `
                     <div class="report-cards">
                         <div class="report-card">
-                            <h3>今日總營收</h3>
+                            <h3>${periodText}總營收</h3>
                             <div class="value">$${data.totalRevenue.toLocaleString()}</div>
                         </div>
-                        
+
                         <div class="report-card">
                             <h3>訂單數量</h3>
-                            <div class="value">${data.orders.length} 筆</div>
+                            <div class="value">${data.orderCount} 筆</div>
                         </div>
-                        
+
                         <div class="report-card">
                             <h3>平均客單價</h3>
-                            <div class="value">$${data.orders.length > 0 ? Math.round(data.totalRevenue / data.orders.length) : 0}</div>
+                            <div class="value">$${data.orderCount > 0 ? Math.round(data.totalRevenue / data.orderCount) : 0}</div>
                         </div>
                     </div>
                 `;
-                
-                if (Object.keys(data.itemSales).length > 0) {
-                    html += '<div class="report-section"><h3>品項銷售排行</h3>';
-                    
-                    const sortedItems = Object.entries(data.itemSales)
-                        .sort((a, b) => b[1] - a[1]);
-                    
-                    for (let [itemId, qty] of sortedItems) {
-                        const revenue = menu[itemId].price * qty;
-                        html += `
-                            <div class="sales-item">
-                                <span class="sales-item-name">${menu[itemId].name}</span>
-                                <span class="sales-item-qty">${qty} 份 / $${revenue}</span>
-                            </div>
-                        `;
-                    }
-                    
-                    html += '</div>';
-                }
-                
-                if (Object.keys(data.timeSales).length > 0) {
-                    html += '<div class="report-section"><h3>時段銷售分析</h3>';
-                    
-                    const sortedTimes = Object.entries(data.timeSales)
-                        .sort((a, b) => a[0].localeCompare(b[0]));
-                    
-                    for (let [time, amount] of sortedTimes) {
-                        html += `
-                            <div class="time-slot">
-                                <span class="time-slot-time">${time} - ${parseInt(time.split(':')[0]) + 1}:00</span>
-                                <span class="time-slot-amount">$${amount}</span>
-                            </div>
-                        `;
-                    }
-                    
-                    html += '</div>';
-                }
-                
+
+                // 圓餅圖區塊
                 html += `
-                    <button class="clear-data-btn" onclick="clearTodayData()">
-                        清除今日資料
-                    </button>
+                    <div class="report-section">
+                        <h3>鯛魚燒口味銷售分佈</h3>
+                        <div class="pie-chart-container">
+                            <div class="pie-chart-wrapper">
+                                <svg class="pie-chart" viewBox="0 0 100 100" id="pieChart"></svg>
+                                <div class="pie-chart-center">
+                                    <div class="pie-chart-center-label">總銷售</div>
+                                    <div class="pie-chart-center-value">${totalFish}</div>
+                                </div>
+                            </div>
+                            <div class="pie-chart-legend" id="pieChartLegend"></div>
+                        </div>
+                    </div>
                 `;
-                
+
                 reportContent.innerHTML = html;
-                
+
+                // 繪製圓餅圖
+                drawPieChart(fishSales, totalFish);
+
             } catch (error) {
+                console.error('載入報表錯誤:', error);
                 reportContent.innerHTML = `
                     <div class="empty-state">
                         <div class="empty-state-icon">⚠️</div>
                         <div>載入報表失敗</div>
+                        <div style="font-size: 12px; margin-top: 10px; color: #999;">${error.message}</div>
                     </div>
                 `;
             }
+        }
+
+        // 繪製圓餅圖
+        function drawPieChart(data, total) {
+            const colors = {
+                '花生鯛魚燒': '#FFB347',
+                '紅豆鯛魚燒': '#DC143C',
+                '卡士達鯛魚燒': '#FFD700'
+            };
+
+            const svg = document.getElementById('pieChart');
+            const legend = document.getElementById('pieChartLegend');
+
+            if (total === 0) {
+                svg.innerHTML = '<circle cx="50" cy="50" r="45" fill="#e0e0e0"/>';
+                legend.innerHTML = '<div style="color: #999;">尚無鯛魚燒銷售資料</div>';
+                return;
+            }
+
+            let currentAngle = 0;
+            let svgContent = '';
+            let legendContent = '';
+
+            const entries = Object.entries(data).filter(([_, value]) => value > 0);
+
+            if (entries.length === 0) {
+                svg.innerHTML = '<circle cx="50" cy="50" r="45" fill="#e0e0e0"/>';
+                legend.innerHTML = '<div style="color: #999;">尚無鯛魚燒銷售資料</div>';
+                return;
+            }
+
+            entries.forEach(([name, value]) => {
+                const percentage = value / total;
+                const angle = percentage * 360;
+
+                // 計算弧線路徑
+                const startX = 50 + 45 * Math.cos((currentAngle - 90) * Math.PI / 180);
+                const startY = 50 + 45 * Math.sin((currentAngle - 90) * Math.PI / 180);
+                const endX = 50 + 45 * Math.cos((currentAngle + angle - 90) * Math.PI / 180);
+                const endY = 50 + 45 * Math.sin((currentAngle + angle - 90) * Math.PI / 180);
+
+                const largeArcFlag = angle > 180 ? 1 : 0;
+
+                if (entries.length === 1) {
+                    // 如果只有一種口味，畫完整圓
+                    svgContent += `<circle cx="50" cy="50" r="45" fill="${colors[name]}"/>`;
+                } else {
+                    svgContent += `
+                        <path d="M 50 50 L ${startX} ${startY} A 45 45 0 ${largeArcFlag} 1 ${endX} ${endY} Z"
+                              fill="${colors[name]}"/>
+                    `;
+                }
+
+                currentAngle += angle;
+
+                // 圖例
+                legendContent += `
+                    <div class="legend-item">
+                        <div class="legend-color" style="background: ${colors[name]}"></div>
+                        <span class="legend-text">${name}</span>
+                        <span class="legend-value">${value}份 (${Math.round(percentage * 100)}%)</span>
+                    </div>
+                `;
+            });
+
+            svg.innerHTML = svgContent;
+            legend.innerHTML = legendContent;
         }
 
         // 清除今日資料
@@ -1582,10 +2248,10 @@
             if (!confirm('確定要清除今日所有營業資料嗎？此操作無法復原！')) {
                 return;
             }
-            
+
             try {
                 const todayKey = getTodayKey();
-                await window.storage.delete(todayKey, true);
+                await apiDelete(todayKey);
                 await initStorage();
                 await loadReport();
                 alert('已清除今日資料');
@@ -1616,15 +2282,22 @@
 
             // 切換頁面
             const orderPage = document.getElementById('orderPage');
+            const salesPage = document.getElementById('salesPage');
             const reportPage = document.getElementById('reportPage');
             const mobileCartFab = document.getElementById('mobileCartFab');
 
+            orderPage.style.display = 'none';
+            salesPage.style.display = 'none';
+            reportPage.style.display = 'none';
+
             if (tabName === 'order') {
                 orderPage.style.display = 'flex';
-                reportPage.style.display = 'none';
                 mobileCartFab.style.display = 'flex';
+            } else if (tabName === 'sales') {
+                salesPage.style.display = 'block';
+                mobileCartFab.style.display = 'none';
+                loadSalesRecords();
             } else if (tabName === 'report') {
-                orderPage.style.display = 'none';
                 reportPage.style.display = 'block';
                 mobileCartFab.style.display = 'none';
                 loadReport();
